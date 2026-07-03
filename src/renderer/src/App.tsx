@@ -1,7 +1,12 @@
 import Versions from './components/Versions'
 import electronLogo from './assets/electron.svg'
+import useCursorInWindow from './hooks/useCursorInWindow'
+import useWindowActiveClass from './hooks/useWindowActiveClass'
 
 function App(): React.JSX.Element {
+  const isCursorInsideWindow = useCursorInWindow()
+  useWindowActiveClass(isCursorInsideWindow)
+  
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
   return (
