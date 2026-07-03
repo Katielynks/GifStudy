@@ -3,6 +3,7 @@ import { createTray } from './tray'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { startCursorMonitor } from './cursorMonitor'
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -59,6 +60,8 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow()
   createTray(mainWindow, icon as unknown as string)
+
+  startCursorMonitor()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
