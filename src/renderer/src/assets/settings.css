@@ -1,0 +1,9 @@
+html,
+body,
+#root {
+  background-color: #111111;
+}
+
+body {
+  background-image: none;
+}
