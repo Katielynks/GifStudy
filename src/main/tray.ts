@@ -16,8 +16,8 @@ export function createTray(mainWindow: BrowserWindow, iconAsset: string) {
       }
 
       settingsWindow = new BrowserWindow({
-        width: 480,
-        height: 360,
+        width: 580,
+        height: 632,
         title: 'Settings',
         autoHideMenuBar: true,
         webPreferences: {
