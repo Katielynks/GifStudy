@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { createTray } from './tray'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { mkdir, readFile, writeFile } from 'fs/promises'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow(): BrowserWindow {
@@ -78,3 +79,60 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle(
+  'gif:save',
+  async (
+    _event,
+    modeKey: string,
+    data: ArrayBuffer,
+    mimeType: string,
+    fileName: string
+  ) => {
+    const gifFolder = join(app.getPath('userData'), 'gifs')
+
+    await mkdir(gifFolder, { recursive: true })
+
+    await writeFile(
+      join(gifFolder, `${modeKey}.image`),
+      Buffer.from(data)
+    )
+
+    await writeFile(
+      join(gifFolder, `${modeKey}.mime`),
+      mimeType
+    )
+
+    await writeFile(
+      join(gifFolder, `${modeKey}.name`),
+      fileName
+    )
+  }
+)
+
+ipcMain.handle('gif:load', async (_event, modeKey: string) => {
+  try {
+    const gifFolder = join(app.getPath('userData'), 'gifs')
+
+    const image = await readFile(
+      join(gifFolder, `${modeKey}.image`)
+    )
+
+    const mimeType = await readFile(
+      join(gifFolder, `${modeKey}.mime`),
+      'utf-8'
+    )
+
+    const fileName = await readFile(
+      join(gifFolder, `${modeKey}.name`),
+      'utf-8'
+    )
+
+    return {
+      preview: `data:${mimeType};base64,${image.toString('base64')}`,
+      fileName
+    }
+  } catch {
+    return null
+  }
+})

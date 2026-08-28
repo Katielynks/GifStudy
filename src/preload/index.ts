@@ -1,8 +1,27 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  saveGif: (
+    modeKey: string,
+    data: ArrayBuffer,
+    mimeType: string,
+    fileName: string
+  ) => {
+    return ipcRenderer.invoke(
+      'gif:save',
+      modeKey,
+      data,
+      mimeType,
+      fileName
+    )
+  },
+
+  loadGif: (modeKey: string) => {
+    return ipcRenderer.invoke('gif:load', modeKey)
+  } 
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

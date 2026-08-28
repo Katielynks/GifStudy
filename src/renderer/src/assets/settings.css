@@ -3,12 +3,12 @@ body,
 #root {
   height: 100%;
   margin: 0;
-  overflow: hidden;
 }
 
 body {
   margin: 0;
   background: #151a21;
+  overflow-y: auto;
   color: #f3f4f6;
   font-family: Arial, sans-serif;
 }
@@ -120,4 +120,30 @@ body {
 
 .save-button:hover {
   opacity: 0.9;
+}
+
+.gif-preview-box {
+  width: 180px;
+  height: 160px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  border: 1px solid #555;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.gif-preview {
+  display: block;
+
+  width: auto;
+  height: auto;
+
+  max-width: calc(100% - 12px);
+  max-height: calc(100% - 12px);
+
+  object-fit: contain;
 }
