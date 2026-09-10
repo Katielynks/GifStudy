@@ -20,7 +20,14 @@ const api = {
 
   loadGif: (modeKey: string) => {
     return ipcRenderer.invoke('gif:load', modeKey)
-  } 
+  },
+
+  
+  onGifUpdated: (callback: (modeKey: string) => void) => {
+    ipcRenderer.on('gif:updated', (_event, modeKey) => {
+        callback(modeKey)
+    })
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

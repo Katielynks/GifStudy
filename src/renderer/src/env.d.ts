@@ -15,5 +15,8 @@ interface Window {
     ) => Promise<void>
 
     loadGif: (modeKey: string) => Promise<GifData | null>
-  }
+        onGifUpdated: (
+        callback: (modeKey: string) => void
+        ) => void
+    }
 }

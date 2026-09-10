@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen} from 'electron'
 import { createTray } from './tray'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -6,10 +6,19 @@ import { mkdir, readFile, writeFile } from 'fs/promises'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow(): BrowserWindow {
+  const display = screen.getPrimaryDisplay()
+  const workArea = display.workArea
+  
+  const windowWidth = 220
+  const windowHeight = 220
+  const margin = 20
+  
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: windowWidth,
+    height: windowHeight,
+    x: workArea.x + workArea.width - windowWidth - margin,
+    y: workArea.y + workArea.height - windowHeight - margin,
     frame: false,
     transparent: true,
     show: false,
@@ -107,6 +116,10 @@ ipcMain.handle(
       join(gifFolder, `${modeKey}.name`),
       fileName
     )
+
+    BrowserWindow.getAllWindows().forEach((window) => {
+        window.webContents.send('gif:updated', modeKey)
+    })
   }
 )
 

@@ -1,16 +1,40 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
+import { useEffect, useState } from 'react'
+import './main-gif.css'
+
 
 function App(): React.JSX.Element {
 
+  const [gif, setGif] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function loadGif(): Promise<void> {
+      const savedGif = await window.api.loadGif('study')
+
+      if (savedGif) {
+        setGif(savedGif.preview)
+      }
+    }
+
+    loadGif()
+
+    window.api.onGifUpdated((modeKey) => {
+    if (modeKey === 'study') {
+      loadGif()
+    }
+    })
+  }, [])
+
   return (
     <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
+      <div>
+        {gif && (
+            <img
+            src={gif}
+            alt="GIF"
+            className="main-gif"
+            />
+        )}
       </div>
-      <Versions></Versions>
     </>
   )
 }

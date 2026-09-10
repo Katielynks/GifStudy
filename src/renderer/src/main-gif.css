@@ -1,0 +1,10 @@
+.main-gif {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+
+  max-width: 200px;
+  max-height: 200px;
+
+  object-fit: contain;
+}
